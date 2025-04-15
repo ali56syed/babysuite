@@ -1,6 +1,6 @@
-# babyfoodlog
+# babysuite
 
-A new Flutter project.
+an app for everything baby!
 
 ## Getting Started
 
