@@ -28,6 +28,6 @@ class FoodLog {
     required this.foodName,
     required this.quantity,
     required this.hadReaction,
-    this.reactionNotes = '', String? imagePath,
+    this.reactionNotes = '',
   });
 }

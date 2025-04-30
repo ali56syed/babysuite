@@ -4,7 +4,7 @@ import '../models/food_log.dart';
 class FoodLogDetailScreen extends StatelessWidget {
   final FoodLog foodLog;
 
-  const FoodLogDetailScreen({super.key, required this.foodLog});
+  const FoodLogDetailScreen({Key? key, required this.foodLog}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

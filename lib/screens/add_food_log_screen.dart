@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/food_log.dart';
 import 'package:hive/hive.dart';
-import 'dart:io'; // Add this import for File
-import 'package:image_picker/image_picker.dart'; // Add this import for image picker
 
 class AddFoodLogScreen extends StatefulWidget {
   @override
@@ -16,9 +14,6 @@ class _AddFoodLogScreenState extends State<AddFoodLogScreen> {
   final _notesController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   bool _hadReaction = false;
-  File? _selectedImage; // Add this to store the selected image
-
-  final ImagePicker _picker = ImagePicker(); // Add this for image picker
 
   void _saveForm() {
     if (_formKey.currentState!.validate()) {
@@ -29,12 +24,13 @@ class _AddFoodLogScreenState extends State<AddFoodLogScreen> {
         quantity: _quantityController.text,
         hadReaction: _hadReaction,
         reactionNotes: _notesController.text,
-        imagePath: _selectedImage?.path, // Save the image path
       );
 
       // Save to Hive
       final box = Hive.box<FoodLog>('food_logs');
       box.add(newFoodLog);
+
+      print('New food log added: $newFoodLog'); // Debug print
 
       Navigator.of(context).pop(); // Navigate back to the home screen
     }
@@ -51,15 +47,6 @@ class _AddFoodLogScreenState extends State<AddFoodLogScreen> {
     if (pickedDate != null) {
       setState(() {
         _selectedDate = pickedDate;
-      });
-    }
-  }
-
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery); // Pick image from gallery
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path); // Store the selected image
       });
     }
   }
@@ -131,26 +118,7 @@ class _AddFoodLogScreenState extends State<AddFoodLogScreen> {
               TextFormField(
                 controller: _notesController,
                 decoration: InputDecoration(labelText: 'Reaction Notes'),
-                maxLines: 5,
-              ),
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  _selectedImage != null
-                      ? Image.file(
-                          _selectedImage!,
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        )
-                      : Text('No image selected'),
-                  Spacer(),
-                  TextButton.icon(
-                    onPressed: _pickImage,
-                    icon: Icon(Icons.image),
-                    label: Text('Attach Image'),
-                  ),
-                ],
+                maxLines: 3,
               ),
             ],
           ),
