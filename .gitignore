@@ -1,0 +1,77 @@
+# Flutter/Dart/Pub related
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+
+# iOS related
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/engine/
+ios/Flutter/App.framework
+ios/Flutter/Generated.xcconfig
+ios/Pods/
+ios/Runner.xcworkspace/
+ios/Runner.xcodeproj/project.xcworkspace/
+ios/Runner.xcodeproj/xcuserdata/
+ios/Runner.xcodeproj/project.xcuserdatad/
+ios/Runner.xcodeproj/xcshareddata/
+ios/Runner.xcodeproj/xcshareddata/xcschemes/
+ios/Flutter/Flutter.podspec
+
+# Android related
+android/.gradle/
+android/.idea/
+android/local.properties
+android/app/build/
+android/build/
+android/app/.cxx/
+android/app/intermediates/
+android/app/outputs/
+
+# VS Code related
+.vscode/
+.history/
+
+# IntelliJ related
+.idea/
+*.iml
+
+# macOS related
+macos/Flutter/ephemeral/
+macos/Flutter/Flutter.podspec
+macos/Flutter/GeneratedPluginRegistrant.swift
+macos/Flutter/Flutter.framework
+macos/Flutter/engine/
+macos/Flutter/App.framework
+macos/Pods/
+macos/Runner.xcworkspace/
+macos/Runner.xcodeproj/project.xcworkspace/
+macos/Runner.xcodeproj/xcuserdata/
+macos/Runner.xcodeproj/project.xcuserdatad/
+macos/Runner.xcodeproj/xcshareddata/
+macos/Runner.xcodeproj/xcshareddata/xcschemes/
+
+# Web related
+web/.dart_tool/
+web/build/
+
+# Windows related
+windows/flutter/ephemeral/
+windows/flutter/generated_plugin_registrant.cc
+windows/flutter/generated_plugin_registrant.h
+windows/flutter/generated_plugin_registrant.cpp
+windows/flutter/generated_plugin_registrant.rc
+windows/flutter/generated_plugin_registrant.def
+windows/flutter/generated_plugin_registrant.exp
+windows/flutter/generated_plugin_registrant.lib
+windows/flutter/generated_plugin_registrant.pdb
+windows/flutter/generated_plugin_registrant.res
+windows/flutter/generated_plugin_registrant.rsp
+windows/flutter/generated_plugin_registrant.sln
+windows/flutter/generated_plugin_registrant.vcxproj
+windows/flutter/generated_plugin_registrant.vcxproj.filters
+windows/flutter/generated_plugin_registrant.vcxproj.user
+windows/flutter/generated_plugin_registrant.vcxproj.vspscc
+windows/flutter/generated_plugin_registrant.vcxproj.vssettings
