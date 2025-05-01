@@ -5,3 +5,4 @@ mongoDbIntegration:
   enabled: true
   AWSAccessKey: "mongodb://localhost:27017"
   AWSSecretKey: "myDatabase"
+  region: "us-east-2"

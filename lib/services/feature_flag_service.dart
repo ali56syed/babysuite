@@ -19,6 +19,21 @@ class FeatureFlagService {
     _flags = Map<String, dynamic>.from(yamlMap);
   }
 
+  dynamic getFeatureValue(String featureName, [String? key]) {
+    if (_flags.isEmpty) {
+      throw Exception('Feature flags not loaded. Call loadFeatureFlags() first.');
+    }
+    if (!_flags.containsKey(featureName)) {
+      throw Exception('Feature flag "$featureName" does not exist.');
+    }
+
+    final feature = _flags[featureName];
+    if (key != null && feature is Map) {
+      return feature[key];
+    }
+    return feature;
+  }
+
   bool isFeatureEnabled(String featureName) {
     if (_flags.isEmpty) {
       throw Exception('Feature flags not loaded. Call loadFeatureFlags() first.');
