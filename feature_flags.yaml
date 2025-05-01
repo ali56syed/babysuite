@@ -3,6 +3,6 @@ enableDarkMode:
   group: "Dev"
 mongoDbIntegration:
   enabled: true
-  AWSAccessKey: "mongodb://localhost:27017"
-  AWSSecretKey: "myDatabase"
+  AWSAccessKey: "AKIAWRMQJCMEB4LEZM7A"
+  AWSSecretKey: "QUY4fUYVOloyl4ATwEjPfjCTbUm5HMESAYV4kkK"
   region: "us-east-2"
