@@ -1,4 +1,4 @@
-# babyfoodlog
+# alaras_app
 
 A new Flutter project.
 

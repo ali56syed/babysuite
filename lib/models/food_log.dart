@@ -21,6 +21,7 @@ class FoodLog {
 
   @HiveField(5)
   final String reactionNotes;
+  final String? imagePath; // Add this field
 
   FoodLog({
     required this.id,
@@ -28,6 +29,7 @@ class FoodLog {
     required this.foodName,
     required this.quantity,
     required this.hadReaction,
-    this.reactionNotes = '',
+    required this.reactionNotes,
+    this.imagePath,
   });
 }

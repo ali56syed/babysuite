@@ -1,6 +1,6 @@
 {
-    "name": "babyfoodlog",
-    "short_name": "babyfoodlog",
+    "name": "alaras_app",
+    "short_name": "alaras_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

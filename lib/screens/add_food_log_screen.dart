@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/food_log.dart';
 import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class AddFoodLogScreen extends StatefulWidget {
   @override
@@ -14,6 +16,9 @@ class _AddFoodLogScreenState extends State<AddFoodLogScreen> {
   final _notesController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   bool _hadReaction = false;
+  File? _selectedImage;
+
+  final ImagePicker _picker = ImagePicker();
 
   void _saveForm() {
     if (_formKey.currentState!.validate()) {
@@ -24,6 +29,7 @@ class _AddFoodLogScreenState extends State<AddFoodLogScreen> {
         quantity: _quantityController.text,
         hadReaction: _hadReaction,
         reactionNotes: _notesController.text,
+        imagePath: _selectedImage?.path,
       );
 
       // Save to Hive
@@ -51,74 +57,112 @@ class _AddFoodLogScreenState extends State<AddFoodLogScreen> {
     }
   }
 
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Food Log'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.save),
-            onPressed: _saveForm,
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: ListView(
+          child: Column(
             children: [
-              TextFormField(
-                controller: _foodNameController,
-                decoration: InputDecoration(labelText: 'Food Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a food name.';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _quantityController,
-                decoration: InputDecoration(labelText: 'Quantity'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the quantity.';
-                  }
-                  return null;
-                },
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Date: ${_selectedDate.toLocal()}'.split(' ')[0],
+              Expanded(
+                child: ListView(
+                  children: [
+                    TextFormField(
+                      controller: _foodNameController,
+                      decoration: InputDecoration(labelText: 'Food Name'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a food name.';
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  TextButton(
-                    onPressed: _pickDate,
-                    child: Text('Select Date'),
-                  ),
-                ],
+                    TextFormField(
+                      controller: _quantityController,
+                      decoration: InputDecoration(labelText: 'Quantity'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the quantity.';
+                        }
+                        return null;
+                      },
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Date: ${_selectedDate.toLocal()}'.split(' ')[0],
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: _pickDate,
+                          child: Text('Select Date'),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: _hadReaction,
+                          onChanged: (value) {
+                            setState(() {
+                              _hadReaction = value!;
+                            });
+                          },
+                        ),
+                        Text('Had Reaction'),
+                      ],
+                    ),
+                    TextFormField(
+                      controller: _notesController,
+                      decoration: InputDecoration(labelText: 'Reaction Notes'),
+                      maxLines: 3,
+                    ),
+                    SizedBox(height: 16),
+                    _selectedImage != null
+                        ? Image.file(
+                            _selectedImage!,
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          )
+                        : Text('No image selected.'),
+                    TextButton.icon(
+                      onPressed: _pickImage,
+                      icon: Icon(Icons.image),
+                      label: Text('Attach Image'),
+                    ),
+                  ],
+                ),
               ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _hadReaction,
-                    onChanged: (value) {
-                      setState(() {
-                        _hadReaction = value!;
-                      });
-                    },
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _saveForm,
+                  child: Text('Save'),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    textStyle: TextStyle(fontSize: 18),
+                    backgroundColor: Theme.of(context).primaryColor,
+                    foregroundColor: Colors.white,
+                    elevation: 5,
+                    shadowColor: Colors.black54,
                   ),
-                  Text('Had Reaction'),
-                ],
-              ),
-              TextFormField(
-                controller: _notesController,
-                decoration: InputDecoration(labelText: 'Reaction Notes'),
-                maxLines: 3,
+                ),
               ),
             ],
           ),
