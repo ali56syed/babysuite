@@ -20,6 +20,23 @@ class FeatureFlagService {
   }
 
   bool isFeatureEnabled(String featureName) {
-    return _flags[featureName] ?? false;
+    if (_flags.isEmpty) {
+      throw Exception('Feature flags not loaded. Call loadFeatureFlags() first.');
+    }
+    if (!_flags.containsKey(featureName)) {
+      throw Exception('Feature flag "$featureName" does not exist.');
+    }
+
+    final selectedFeature = _flags[featureName];
+
+    if (selectedFeature is Map){
+      final value = selectedFeature['enabled'];
+      print (value);
+      if (selectedFeature['enabled'] == true){
+        return true;
+      }
+    }
+
+    return false;
   }
 }

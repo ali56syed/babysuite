@@ -1,1 +1,7 @@
-enableDarkMode: false
+enableDarkMode: 
+  enabled: true
+  group: "Dev"
+mongoDbIntegration:
+  enabled: true
+  AWSAccessKey: "mongodb://localhost:27017"
+  AWSSecretKey: "myDatabase"
