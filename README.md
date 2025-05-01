@@ -1,16 +1,11 @@
 # alaras_app
 
-A new Flutter project.
+A new Flutter project to track all the food that Alara has tried along with some key data points.
 
 ## Getting Started
+- Visit https://docs.flutter.dev/get-started/install/macos/mobile-ios and setup Flutter locally
+- Clone down repo, preferably the main branch
+- Open up the root folder in VS Code
+- run "flutter pub get" in the root folder
+- run "flutter run"
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
