@@ -29,14 +29,6 @@ class FeatureFlagService {
 
     final selectedFeature = _flags[featureName];
 
-    if (selectedFeature is Map){
-      final value = selectedFeature['enabled'];
-      print (value);
-      if (selectedFeature['enabled'] == true){
-        return true;
-      }
-    }
-
-    return false;
+    return selectedFeature['enabled'] ? true : false;
   }
 }
