@@ -37,6 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   hive_flutter: ^1.1.0
   image_picker: ^0.8.7+4
+  aws_dynamodb_api: ^2.0.0
+  aws_client: ^0.7.0
 
 dev_dependencies:
   flutter_test:

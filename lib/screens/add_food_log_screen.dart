@@ -3,6 +3,7 @@ import '../models/food_log.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import '../services/dynamodb_service.dart'; // Import your DynamoDB service if needed
 
 class AddFoodLogScreen extends StatefulWidget {
   @override
@@ -35,6 +36,18 @@ class _AddFoodLogScreenState extends State<AddFoodLogScreen> {
       // Save to Hive
       final box = Hive.box<FoodLog>('food_logs');
       box.add(newFoodLog);
+
+      // Save to DynamoDB
+      final dynamoDBService = DynamoDBService();
+      dynamoDBService.addFoodLog({
+        'id': newFoodLog.id,
+        'date': newFoodLog.date.toIso8601String(),
+        'foodName': newFoodLog.foodName,
+        'quantity': newFoodLog.quantity,
+        'hadReaction': newFoodLog.hadReaction,
+        'reactionNotes': newFoodLog.reactionNotes,
+        'imagePath': newFoodLog.imagePath,
+      });
 
       print('New food log added: $newFoodLog'); // Debug print
 
