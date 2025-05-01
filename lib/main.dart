@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'models/food_log.dart';
 import 'screens/home_screen.dart';
+import 'services/feature_flag_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Hive.initFlutter();
 
   // Register the FoodLogAdapter
@@ -13,13 +15,17 @@ void main() async {
   // Open the Hive box
   await Hive.openBox<FoodLog>('food_logs');
 
-  runApp(MyApp());  
+    final featureFlagService = FeatureFlagService();
+  await featureFlagService.loadFeatureFlags();
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: FeatureFlagService().isFeatureEnabled('enableDarkMode') ? true : false,
       title: 'Baby Food Log',
       theme: ThemeData(
         primarySwatch: Colors.blue,
