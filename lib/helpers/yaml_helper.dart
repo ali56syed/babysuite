@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:yaml/yaml.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 
 class YamlHelper {
   static final YamlHelper _instance = YamlHelper._internal();
@@ -13,11 +15,10 @@ class YamlHelper {
   }
 
   Future<void> loadFeatureFlags() async {
-    final file = File('/Users/syed.ali/Repos/babysuite/feature_flags.yaml');
-    final yamlString = await file.readAsString();
+    final yamlString = await rootBundle.loadString('lib/config/feature_flags.yaml');
     final yamlMap = loadYaml(yamlString) as YamlMap;
 
-    _flags = Map<String, dynamic>.from(yamlMap);
+    _flags = jsonDecode(jsonEncode(yamlMap)) as Map<String, dynamic>;
   }
 
   dynamic getFeatureValue(String featureName, [String? key]) {
@@ -49,11 +50,10 @@ class YamlHelper {
   }
   
   Future<void> loadAWSConfigurations() async {
-    final file = File('/Users/syed.ali/Repos/babysuite/aws_config.yaml');
-    final yamlString = await file.readAsString();
+    final yamlString = await rootBundle.loadString('lib/config/aws_config.yaml');
     final yamlMap = loadYaml(yamlString) as YamlMap;
 
-    _awsConfigurations = Map<String, dynamic>.from(yamlMap);
+    _awsConfigurations = jsonDecode(jsonEncode(yamlMap)) as Map<String, dynamic>;
   }
 
   dynamic getConfigValue(String configName, [String? key]) {

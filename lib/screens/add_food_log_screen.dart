@@ -25,7 +25,7 @@ class _AddFoodLogScreenState extends State<AddFoodLogScreen> {
   void _saveForm() {
     if (_formKey.currentState!.validate()) {
       final newFoodLog = FoodLog(
-        id: DateTime.now().toString(),
+        id: _foodNameController.text,
         date: _selectedDate,
         foodName: _foodNameController.text,
         quantity: _quantityController.text,
