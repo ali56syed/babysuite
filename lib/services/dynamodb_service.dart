@@ -1,15 +1,15 @@
 import 'package:aws_client/dynamo_document.dart';
-import 'feature_flag_service.dart';
+import '../helpers/yaml_helper.dart';
 
 class DynamoDBService {
   final DynamoDB dynamoDB;
 
   DynamoDBService()
       : dynamoDB = DynamoDB(
-          region: FeatureFlagService().getConfigValue('AWSConfig', 'Region'), // Replace with your AWS region
+          region: YamlHelper().getConfigValue('AWSConfig', 'Region'), // Replace with your AWS region
           credentials: AwsClientCredentials(
-            accessKey: FeatureFlagService().getConfigValue('AWSConfig', 'AWSAccessKey'),
-            secretKey: FeatureFlagService().getConfigValue('AWSConfig', 'AWSSecretKey'),
+            accessKey: YamlHelper().getConfigValue('AWSConfig', 'AWSAccessKey'),
+            secretKey: YamlHelper().getConfigValue('AWSConfig', 'AWSSecretKey'),
           ),
         );
 

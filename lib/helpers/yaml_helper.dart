@@ -1,14 +1,14 @@
 import 'dart:io';
 import 'package:yaml/yaml.dart';
 
-class FeatureFlagService {
-  static final FeatureFlagService _instance = FeatureFlagService._internal();
+class YamlHelper {
+  static final YamlHelper _instance = YamlHelper._internal();
   late Map<String, dynamic> _flags;
   late Map<String, dynamic> _awsConfigurations;
 
-  FeatureFlagService._internal();
+  YamlHelper._internal();
 
-  factory FeatureFlagService() {
+  factory YamlHelper() {
     return _instance;
   }
 
@@ -18,14 +18,6 @@ class FeatureFlagService {
     final yamlMap = loadYaml(yamlString) as YamlMap;
 
     _flags = Map<String, dynamic>.from(yamlMap);
-  }
-
-  Future<void> loadAWSConfigurations() async {
-    final file = File('/Users/syed.ali/Repos/babysuite/aws_config.yaml');
-    final yamlString = await file.readAsString();
-    final yamlMap = loadYaml(yamlString) as YamlMap;
-
-    _awsConfigurations = Map<String, dynamic>.from(yamlMap);
   }
 
   dynamic getFeatureValue(String featureName, [String? key]) {
@@ -43,6 +35,27 @@ class FeatureFlagService {
     return feature;
   }
 
+  bool isFeatureEnabled(String featureName) {
+    if (_flags.isEmpty) {
+      throw Exception('Feature flags not loaded. Call loadFeatureFlags() first.');
+    }
+    if (!_flags.containsKey(featureName)) {
+      throw Exception('Feature flag "$featureName" does not exist.');
+    }
+
+    final selectedFeature = _flags[featureName];
+
+    return selectedFeature['enabled'] ? true : false;
+  }
+  
+  Future<void> loadAWSConfigurations() async {
+    final file = File('/Users/syed.ali/Repos/babysuite/aws_config.yaml');
+    final yamlString = await file.readAsString();
+    final yamlMap = loadYaml(yamlString) as YamlMap;
+
+    _awsConfigurations = Map<String, dynamic>.from(yamlMap);
+  }
+
   dynamic getConfigValue(String configName, [String? key]) {
     if (_awsConfigurations.isEmpty) {
       throw Exception('AWS config not loaded. Call loadAWSConfigurations() first.');
@@ -56,18 +69,5 @@ class FeatureFlagService {
       return config[key];
     }
     return config;
-  }
-
-  bool isFeatureEnabled(String featureName) {
-    if (_flags.isEmpty) {
-      throw Exception('Feature flags not loaded. Call loadFeatureFlags() first.');
-    }
-    if (!_flags.containsKey(featureName)) {
-      throw Exception('Feature flag "$featureName" does not exist.');
-    }
-
-    final selectedFeature = _flags[featureName];
-
-    return selectedFeature['enabled'] ? true : false;
   }
 }
