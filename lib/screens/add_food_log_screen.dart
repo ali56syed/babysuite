@@ -34,23 +34,11 @@ class _AddFoodLogScreenState extends State<AddFoodLogScreen> {
         imagePath: _selectedImage?.path,
       );
 
-      // Save to Hive
-      final box = Hive.box<FoodLog>('food_logs');
-      box.add(newFoodLog);
+      // Convert to Map
+      final foodLogMap = newFoodLog.toMap();
 
-      // Save to DynamoDB
       final dynamoDBService = DynamoDBService();
-      dynamoDBService.addFoodLog({
-        'id': newFoodLog.id,
-        'date': newFoodLog.date.toIso8601String(),
-        'foodName': newFoodLog.foodName,
-        'quantity': newFoodLog.quantity,
-        'hadReaction': newFoodLog.hadReaction,
-        'reactionNotes': newFoodLog.reactionNotes,
-        'imagePath': newFoodLog.imagePath,
-      });
-
-      print('New food log added: $newFoodLog'); // Debug print
+      dynamoDBService.addFoodLog(foodLogMap);
 
       Navigator.of(context).pop(); // Navigate back to the home screen
     }
