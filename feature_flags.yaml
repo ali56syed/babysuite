@@ -1,8 +1,6 @@
 enableDarkMode: 
-  enabled: true
+  enabled: false
   group: "Dev"
 mongoDbIntegration:
   enabled: true
-  AWSAccessKey: "AKIAWRMQJCMEB4LEZM7A"
-  AWSSecretKey: "QUY4fUYVOloyl4ATwEjPfjCTbUm5HMESAYV4kkK"
-  region: "us-east-2"
+  group: "Dev"

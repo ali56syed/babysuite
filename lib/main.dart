@@ -15,8 +15,9 @@ void main() async {
   // Open the Hive box
   await Hive.openBox<FoodLog>('food_logs');
 
-    final featureFlagService = FeatureFlagService();
+  final featureFlagService = FeatureFlagService();
   await featureFlagService.loadFeatureFlags();
+  await featureFlagService.loadAWSConfigurations();
 
   runApp(MyApp());
 }

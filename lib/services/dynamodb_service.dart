@@ -1,17 +1,15 @@
-import 'dart:convert';
 import 'package:aws_client/dynamo_document.dart';
 import 'feature_flag_service.dart';
-
 
 class DynamoDBService {
   final DynamoDB dynamoDB;
 
   DynamoDBService()
       : dynamoDB = DynamoDB(
-          region: FeatureFlagService().getFeatureValue('mongoDbIntegration','region'), // Replace with your AWS region
+          region: FeatureFlagService().getConfigValue('AWSConfig', 'Region'), // Replace with your AWS region
           credentials: AwsClientCredentials(
-            accessKey: FeatureFlagService().getFeatureValue('mongoDbIntegration','AWSAccessKey'), 
-            secretKey: FeatureFlagService().getFeatureValue('mongoDbIntegration','AWSAccessKey'), 
+            accessKey: FeatureFlagService().getConfigValue('AWSConfig', 'AWSAccessKey'),
+            secretKey: FeatureFlagService().getConfigValue('AWSConfig', 'AWSSecretKey'),
           ),
         );
 
