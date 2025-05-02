@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import '../models/food_log.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
