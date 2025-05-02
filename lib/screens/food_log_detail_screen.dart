@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import '../models/food_log.dart';
+import '../services/dynamodb_service.dart';
 
 class FoodLogDetailScreen extends StatelessWidget {
   final FoodLog foodLog;
@@ -10,7 +10,7 @@ class FoodLogDetailScreen extends StatelessWidget {
   const FoodLogDetailScreen({Key? key, required this.foodLog}) : super(key: key);
 
   Future<void> _deleteFoodLog(BuildContext context) async {
-    final box = Hive.box<FoodLog>('food_logs');
+    final dynamoDBService = DynamoDBService();
 
     // Show confirmation dialog
     final confirmDelete = await showDialog<bool>(
@@ -32,12 +32,9 @@ class FoodLogDetailScreen extends StatelessWidget {
     );
 
     if (confirmDelete == true) {
-      // Find the key of the food log in the Hive box
-      final key = box.keys.firstWhere((k) => box.get(k) == foodLog, orElse: () => null);
-
-      if (key != null) {
-        // Delete the food log from Hive
-        await box.delete(key);
+      try {
+        // Delete the food log from DynamoDB
+        await dynamoDBService.deleteFoodLog(foodLog.id);
 
         // Navigate back to the previous screen and pass a result
         Navigator.of(context).pop(true); // Pass `true` to indicate deletion
@@ -46,8 +43,8 @@ class FoodLogDetailScreen extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('${foodLog.foodName} deleted.')),
         );
-      } else {
-        // Handle the case where the food log is not found
+      } catch (e) {
+        // Handle errors during deletion
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to delete ${foodLog.foodName}.')),
         );

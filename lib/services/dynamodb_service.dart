@@ -13,10 +13,30 @@ class DynamoDBService {
           ),
         );
 
+  Future<List<Map<String, dynamic>>> fetchFoodLogs() async {
+    final response = await dynamoDB.scan(tableName: 'FoodLogs');
+    final items = response.items;
+
+    return items!.map((item) {
+      return item.map((key, value) => MapEntry(key, value.s ?? '')) // Convert AttributeValue to String
+        ..['date'] = DateTime.parse(item['date']?.s ?? '').toIso8601String() // Ensure date is in ISO 8601 format
+        ..remove('imagePath'); // Remove imagePath if not needed
+    }).toList();
+  }
+
+  Future<void> deleteFoodLog(String id) async {
+    await dynamoDB.deleteItem(
+      tableName: 'FoodLogs',
+      key: {
+        'id': AttributeValue(s: id),
+      },
+    );
+  }
+
   Future<void> addFoodLog(Map<String, dynamic> foodLog) async {
     await dynamoDB.putItem(
       tableName: 'FoodLogs',
-      item: foodLog.map((key, value) => MapEntry(key, AttributeValue(s: value.toString()))),
+      item: foodLog.map((key, value) => MapEntry(key, AttributeValue(s: value))),
     );
   }
 }
