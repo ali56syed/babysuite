@@ -7,5 +7,20 @@ A new Flutter project to track all the food that Alara has tried along with some
 - Clone down repo, preferably the main branch
 - Open up the root folder in VS Code
 - run "flutter pub get" in the root folder
-- run "flutter run"
+- run "flutter run --release"
 
+## Current Features
+- Log Food
+- View Log
+- Search Log
+- Attach Image
+- View Details
+- DynamoDB Integration
+
+## Planned Features
+- Edit Details
+  - Ability to edit the details of a logged item.
+- Take Photo
+  - Ability to take photo when logging an item.
+- Global Filters
+  - Ability to filter the log.
