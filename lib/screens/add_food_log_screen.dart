@@ -39,7 +39,7 @@ class _AddFoodLogScreenState extends State<AddFoodLogScreen> {
       final dynamoDBService = DynamoDBService();
       dynamoDBService.addFoodLog(foodLogMap);
 
-      Navigator.of(context).pop(); // Navigate back to the home screen
+      Navigator.of(context).pop(true); // Navigate back to the home screen
     }
   }
 

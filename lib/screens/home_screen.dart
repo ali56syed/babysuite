@@ -99,14 +99,16 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Icon(Icons.add),
             onPressed: () async {
               // Navigate to AddFoodLogScreen
-              await Navigator.of(context).push(
+              final result = await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => AddFoodLogScreen(),
                 ),
               );
 
               // Refresh logs after adding a new entry
-              await _initializeDynamoDBService();
+              if (result == true){
+                await _initializeDynamoDBService();
+              }
             },
           ),
         );

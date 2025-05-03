@@ -4,7 +4,7 @@ class FoodLog {
   final String foodName;
   final int quantity;
   final bool hadReaction;
-  final String reactionNotes;
+  final String? reactionNotes; // Optional field
   final String? imagePath; // Optional field
 
   FoodLog({
@@ -13,7 +13,7 @@ class FoodLog {
     required this.foodName,
     required this.quantity,
     required this.hadReaction,
-    required this.reactionNotes,
+    this.reactionNotes,
     this.imagePath,
   });
 
