@@ -1,27 +1,11 @@
-import 'package:hive/hive.dart';
-
-part 'food_log.g.dart';
-
-@HiveType(typeId: 0)
 class FoodLog {
-  @HiveField(0)
   final String id;
-
-  @HiveField(1)
   final DateTime date;
-
-  @HiveField(2)
   final String foodName;
-
-  @HiveField(3)
-  final String quantity;
-
-  @HiveField(4)
+  final int quantity;
   final bool hadReaction;
-
-  @HiveField(5)
   final String reactionNotes;
-  final String? imagePath; // Add this field
+  final String? imagePath; // Optional field
 
   FoodLog({
     required this.id,
@@ -32,4 +16,30 @@ class FoodLog {
     required this.reactionNotes,
     this.imagePath,
   });
+
+  // Convert FoodLog to Map<String, dynamic>
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id.toString(),
+      'date': date.toIso8601String(), // Convert DateTime to ISO 8601 string
+      'foodName': foodName.toString(),
+      'quantity': quantity.toString(),
+      'hadReaction': hadReaction.toString(),
+      'reactionNotes': reactionNotes.toString(),
+      'imagePath': imagePath.toString(),
+    };
+  }
+
+  // Create a FoodLog from Map<String, dynamic>
+  factory FoodLog.fromMap(Map<String, dynamic> map) {
+    return FoodLog(
+      id: map['id'] as String,
+      date: DateTime.parse(map['date'] as String), // Parse ISO 8601 string to DateTime
+      foodName: map['foodName'] as String,
+      quantity: int.parse(map['quantity'] as String),
+      hadReaction: bool.parse(map['hadReaction'] as String),
+      reactionNotes: map['reactionNotes'] as String,
+      imagePath: map['imagePath'] as String?,
+    );
+  }
 }

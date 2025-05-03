@@ -1,0 +1,6 @@
+enableDarkMode: 
+  enabled: false
+  group: "Dev"
+mongoDbIntegration:
+  enabled: true
+  group: "Dev"

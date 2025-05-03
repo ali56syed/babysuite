@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/food_log.dart';
-import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+
+import '../services/dynamodb_service.dart';
 
 class AddFoodLogScreen extends StatefulWidget {
   @override
@@ -23,20 +24,20 @@ class _AddFoodLogScreenState extends State<AddFoodLogScreen> {
   void _saveForm() {
     if (_formKey.currentState!.validate()) {
       final newFoodLog = FoodLog(
-        id: DateTime.now().toString(),
+        id: _foodNameController.text,
         date: _selectedDate,
         foodName: _foodNameController.text,
-        quantity: _quantityController.text,
-        hadReaction: _hadReaction,
+        quantity: int.parse(_quantityController.text),
+        hadReaction: bool.parse(_hadReaction.toString()),
         reactionNotes: _notesController.text,
         imagePath: _selectedImage?.path,
       );
 
-      // Save to Hive
-      final box = Hive.box<FoodLog>('food_logs');
-      box.add(newFoodLog);
+      // Convert to Map
+      final foodLogMap = newFoodLog.toMap();
 
-      print('New food log added: $newFoodLog'); // Debug print
+      final dynamoDBService = DynamoDBService();
+      dynamoDBService.addFoodLog(foodLogMap);
 
       Navigator.of(context).pop(); // Navigate back to the home screen
     }
@@ -153,17 +154,18 @@ class _AddFoodLogScreenState extends State<AddFoodLogScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _saveForm,
-                  child: Text('Save'),
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    padding: EdgeInsets.all(16), 
                     textStyle: TextStyle(fontSize: 18),
                     backgroundColor: Theme.of(context).primaryColor,
                     foregroundColor: Colors.white,
                     elevation: 5,
                     shadowColor: Colors.black54,
                   ),
+                  child: Text('Save'),
                 ),
               ),
+              SizedBox(height: 16),
             ],
           ),
         ),

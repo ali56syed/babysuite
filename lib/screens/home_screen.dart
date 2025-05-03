@@ -1,5 +1,5 @@
+import 'package:alaras_app/services/dynamodb_service.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import '../models/food_log.dart';
 import 'add_food_log_screen.dart';
 import 'food_log_detail_screen.dart';
@@ -10,43 +10,44 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<void> _hiveInitialization;
-  late Box<FoodLog> box;
+
+  DynamoDBService dynamoDBService = DynamoDBService();
+  late Future<void> _dynamoDbServiceInitialization;
   List<FoodLog> logs = [];
 
   @override
   void initState() {
     super.initState();
-    _hiveInitialization = _initializeHiveBox(); // Initialize the Hive box asynchronously
+    _dynamoDbServiceInitialization = _initializeDynamoDBService(); // Initialize the Hive box asynchronously
   }
 
-  Future<void> _initializeHiveBox() async {
-    box = await Hive.openBox<FoodLog>('food_logs'); // Open the Hive box
+  Future<void> _initializeDynamoDBService() async {
+    final fetchedLogs = await dynamoDBService.fetchFoodLogs(); // Fetch logs as List<Map<String, dynamic>>
     setState(() {
-      logs = box.values.toList(); // Fetch initial logs after the box is initialized
+      logs = fetchedLogs.map((log) => FoodLog.fromMap(log)).toList(); // Convert to List<FoodLog>
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _hiveInitialization,
+      future: _dynamoDbServiceInitialization,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          // Show a loading indicator while the Hive box is being initialized
+          // Show a loading indicator while the DynamoDbService is being initialized
           return Scaffold(
             appBar: AppBar(title: Text('Baby Food Log')),
             body: Center(child: CircularProgressIndicator()),
           );
         } else if (snapshot.hasError) {
-          // Handle errors during Hive initialization
+          // Handle errors during DynamoDbService initialization
           return Scaffold(
             appBar: AppBar(title: Text('Baby Food Log')),
-            body: Center(child: Text('Failed to load data. Please try again.')),
+            body: Center(child: Text('Error initializing logs: ${snapshot.error}')),
           );
         }
 
-        // Render the main UI once the Hive box is ready
+        // Render the main UI once the DynamoDbService is initialized
         return Scaffold(
           appBar: AppBar(
             title: Text('Baby Food Log'),
@@ -88,9 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         // Refresh logs if a log was deleted
                         if (result == true) {
-                          setState(() {
-                            logs = box.values.toList(); // Fetch updated logs from Hive
-                          });
+                          await _initializeDynamoDBService();
                         }
                       },
                     );
@@ -107,9 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
               );
 
               // Refresh logs after adding a new entry
-              setState(() {
-                logs = box.values.toList();
-              });
+              await _initializeDynamoDBService();
             },
           ),
         );
