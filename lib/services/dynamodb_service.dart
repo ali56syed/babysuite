@@ -14,7 +14,7 @@ class DynamoDBService {
         );
 
   Future<List<Map<String, dynamic>>> fetchFoodLogs() async {
-    final response = await dynamoDB.scan(tableName: 'FoodLogs');
+    final response = await dynamoDB.scan(tableName: YamlHelper().getConfigValue('AWSConfig', 'dynamodb_table'));
     final items = response.items;
 
     return items!.map((item) {
@@ -26,7 +26,7 @@ class DynamoDBService {
 
   Future<void> deleteFoodLog(String id) async {
     await dynamoDB.deleteItem(
-      tableName: 'FoodLogs',
+      tableName: YamlHelper().getConfigValue('AWSConfig', 'dynamodb_table'),
       key: {
         'id': AttributeValue(s: id),
       },
@@ -35,7 +35,7 @@ class DynamoDBService {
 
   Future<void> addFoodLog(Map<String, dynamic> foodLog) async {
     await dynamoDB.putItem(
-      tableName: 'FoodLogs',
+      tableName: YamlHelper().getConfigValue('AWSConfig', 'dynamodb_table'),
       item: foodLog.map((key, value) => MapEntry(key, AttributeValue(s: value))),
     );
   }
