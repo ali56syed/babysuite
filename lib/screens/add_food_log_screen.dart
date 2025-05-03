@@ -6,6 +6,10 @@ import 'dart:io';
 import '../services/dynamodb_service.dart';
 
 class AddFoodLogScreen extends StatefulWidget {
+  final List<FoodLog> logs;
+
+  AddFoodLogScreen(this.logs);
+
   @override
   _AddFoodLogScreenState createState() => _AddFoodLogScreenState();
 }
@@ -21,7 +25,7 @@ class _AddFoodLogScreenState extends State<AddFoodLogScreen> {
 
   final ImagePicker _picker = ImagePicker();
 
-  void _saveForm() {
+  void _saveForm() async {
     if (_formKey.currentState!.validate()) {
       final newFoodLog = FoodLog(
         id: _foodNameController.text,
@@ -33,11 +37,24 @@ class _AddFoodLogScreenState extends State<AddFoodLogScreen> {
         imagePath: _selectedImage?.path,
       );
 
+      final existingLog = widget.logs.any((log) => log.foodName == newFoodLog.foodName);
+      if (existingLog) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Center(
+              child: Text('This food has already been added!'),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
       // Convert to Map
       final foodLogMap = newFoodLog.toMap();
 
       final dynamoDBService = DynamoDBService();
-      dynamoDBService.addFoodLog(foodLogMap);
+      await dynamoDBService.addFoodLog(foodLogMap, );
 
       Navigator.of(context).pop(true); // Navigate back to the home screen
     }

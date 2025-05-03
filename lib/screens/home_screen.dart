@@ -15,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<void> _dynamoDbServiceInitialization;
   List<FoodLog> logs = [];
 
-  @override
+    @override
   void initState() {
     super.initState();
     _dynamoDbServiceInitialization = _initializeDynamoDBService(); // Initialize the Hive box asynchronously
@@ -30,89 +30,81 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _dynamoDbServiceInitialization,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // Show a loading indicator while the DynamoDbService is being initialized
-          return Scaffold(
-            appBar: AppBar(title: Text('Baby Food Log')),
-            body: Center(child: CircularProgressIndicator()),
-          );
-        } else if (snapshot.hasError) {
-          // Handle errors during DynamoDbService initialization
-          return Scaffold(
-            appBar: AppBar(title: Text('Baby Food Log')),
-            body: Center(child: Text('Error initializing logs: ${snapshot.error}')),
-          );
-        }
+    return Scaffold(
+      appBar: AppBar(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text('Baby Food Log'),
+            Text(
+              'Alara has had ${logs.length} different food items!',
+              style: TextStyle(fontSize: 14, color: Colors.black54),
+            ),
+          ],
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: FoodLogSearchDelegate(logs),
+              );
+            },
+          ),
+        ],
+      ),
+      body: logs.isEmpty
+          ? Center(child: Text('No food logs yet.'))
+          : RefreshIndicator(
+              onRefresh: _initializeDynamoDBService, // Pull-to-refresh functionality
+              child: ListView.builder(
+                itemCount: logs.length,
+                itemBuilder: (context, index) {
+                  final log = logs[index];
+                  return ListTile(
+                    title: Text(log.foodName),
+                    subtitle: Text('Date: ${log.date.toLocal().toString().split(' ')[0]}'),
+                    leading: Icon(Icons.fastfood_outlined),
+                    trailing: log.hadReaction
+                        ? Icon(
+                            Icons.info,
+                            color: Colors.red,
+                          )
+                        : null,
+                    onTap: () async {
+                      // Navigate to FoodLogDetailScreen
+                      final result = await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => FoodLogDetailScreen(foodLog: log),
+                        ),
+                      );
 
-        // Render the main UI once the DynamoDbService is initialized
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Baby Food Log'),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  showSearch(
-                    context: context,
-                    delegate: FoodLogSearchDelegate(logs),
+                      // Refresh logs if a log was deleted
+                      if (result == true) {
+                        await _initializeDynamoDBService();
+                      }
+                    },
                   );
                 },
               ),
-            ],
-          ),
-          body: logs.isEmpty
-              ? Center(child: Text('No food logs yet.'))
-              : ListView.builder(
-                  itemCount: logs.length,
-                  itemBuilder: (context, index) {
-                    final log = logs[index];
-                    return ListTile(
-                      title: Text(log.foodName),
-                      subtitle: Text('Date: ${log.date.toLocal().toString().split(' ')[0]}'),
-                      leading: Icon(Icons.fastfood_outlined),
-                      trailing: log.hadReaction
-                          ? Icon(
-                              Icons.info,
-                              color: Colors.red,
-                            )
-                          : null,
-                      onTap: () async {
-                        // Navigate to FoodLogDetailScreen
-                        final result = await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => FoodLogDetailScreen(foodLog: log),
-                          ),
-                        );
+            ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () async {
+          // Navigate to AddFoodLogScreen
+          final result = await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => AddFoodLogScreen(logs),
+            ),
+          );
 
-                        // Refresh logs if a log was deleted
-                        if (result == true) {
-                          await _initializeDynamoDBService();
-                        }
-                      },
-                    );
-                  },
-                ),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () async {
-              // Navigate to AddFoodLogScreen
-              final result = await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => AddFoodLogScreen(),
-                ),
-              );
-
-              // Refresh logs after adding a new entry
-              if (result == true){
-                await _initializeDynamoDBService();
-              }
-            },
-          ),
-        );
-      },
+          // Refresh logs after adding a new entry
+          if (result == true) {
+            await _initializeDynamoDBService(); // Fetch the latest logs
+          }
+        },
+      ),
     );
   }
 }

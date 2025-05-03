@@ -78,10 +78,10 @@ class FoodLogDetailScreen extends StatelessWidget {
             SizedBox(height: 8),
             Text('Quantity: ${foodLog.quantity}'),
             SizedBox(height: 8),
-            Text('Had Reaction: ${foodLog.hadReaction ? "Yes" : "No"}'),
-            if (foodLog.hadReaction)
+            Text('Had Reaction: ${foodLog.hadReaction == true ? "Yes" : "No"}'),
+            if (foodLog.hadReaction == true)
               SizedBox(height: 8),
-            if (foodLog.hadReaction)
+            if (foodLog.hadReaction == true)
               Text('Reaction Notes: ${foodLog.reactionNotes}'),
             if (foodLog.imagePath != null && foodLog.imagePath!.isNotEmpty)
               SizedBox(height: 8),
