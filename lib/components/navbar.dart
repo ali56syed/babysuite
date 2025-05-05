@@ -49,7 +49,7 @@ class Navbar extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.home),
-              title: Text('Home'),
+              title: Text('Food Log'),
               onTap: () {
                 Navigator.pop(context); // Close the drawer
               },

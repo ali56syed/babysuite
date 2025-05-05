@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import '../models/food_log.dart';
 import '../services/dynamodb_service.dart';
