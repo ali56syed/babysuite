@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/add_food_log_screen.dart';
-import 'screens/home_screen.dart';
+import 'screens/food_log_screen.dart';
 import 'helpers/yaml_helper.dart';
 
 void main() async {
@@ -21,13 +21,13 @@ class MyApp extends StatelessWidget {
       title: 'Baby Food Log',
       initialRoute: '/',
       routes: {
-        '/': (context) => HomeScreen(),
+        '/': (context) => FoodLogScreen(),
+        '/foodLog': (context) => FoodLogScreen(),
         '/addFoodLog': (context) => AddFoodLogScreen([]),
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: HomeScreen(),
     );
   }
 }

@@ -6,12 +6,12 @@ import 'add_food_log_screen.dart';
 import 'food_log_detail_screen.dart';
 import '../components/navbar.dart';
 
-class HomeScreen extends StatefulWidget {
+class FoodLogScreen extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _FoodLogScreenState createState() => _FoodLogScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _FoodLogScreenState extends State<FoodLogScreen> {
 
   DynamoDBService dynamoDBService = DynamoDBService();
   late Future<void> _dynamoDbServiceInitialization;
