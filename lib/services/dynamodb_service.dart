@@ -21,7 +21,7 @@ class DynamoDBService {
         return [];
       }
 
-    final logs = items!.map((item) {
+    final logs = items.map((item) {
       return item.map((key, value) => MapEntry(key, value.s ?? '')) // Convert AttributeValue to String
         ..['date'] = DateTime.parse(item['date']?.s ?? '').toIso8601String() // Ensure date is in ISO 8601 format
         ..remove('imagePath'); // Remove imagePath if not needed
