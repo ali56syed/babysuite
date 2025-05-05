@@ -4,3 +4,6 @@ enableDarkMode:
 mongoDbIntegration:
   enabled: true
   group: "Dev"
+navbar:
+  enabled: true
+  group: "Dev"
