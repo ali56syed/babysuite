@@ -22,9 +22,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomeScreen(),
-        // Add other routes here as needed
         '/addFoodLog': (context) => AddFoodLogScreen([]),
-        // '/settings': (context) => SettingsScreen(),
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,

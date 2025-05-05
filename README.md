@@ -16,6 +16,7 @@ A new Flutter project to track all the food that Alara has tried along with some
 - Attach Image
 - View Details
 - DynamoDB Integration
+- Navbar
 
 ## Planned Features
 - Edit Details
@@ -24,7 +25,5 @@ A new Flutter project to track all the food that Alara has tried along with some
   - Ability to take photo when logging an item.
 - Global Filters
   - Ability to filter the log.
-- Navbar
-  - Ability to navigate to different parts of the application.
 - Milk Log
   - Ability to log and track milk feedings.
