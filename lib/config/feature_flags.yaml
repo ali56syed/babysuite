@@ -5,5 +5,5 @@ mongoDbIntegration:
   enabled: true
   group: "Dev"
 navbar:
-  enabled: true
+  enabled: false
   group: "Dev"

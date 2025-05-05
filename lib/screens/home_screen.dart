@@ -1,8 +1,10 @@
 import 'package:alaras_app/services/dynamodb_service.dart';
 import 'package:flutter/material.dart';
+import '../helpers/yaml_helper.dart';
 import '../models/food_log.dart';
 import 'add_food_log_screen.dart';
 import 'food_log_detail_screen.dart';
+import '../components/navbar.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   DynamoDBService dynamoDBService = DynamoDBService();
   late Future<void> _dynamoDbServiceInitialization;
   List<FoodLog> logs = [];
+  late bool isNavbarEnabled = YamlHelper().isFeatureEnabled('navbar'); 
 
     @override
   void initState() {
@@ -54,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      drawer: isNavbarEnabled ? Navbar() : null,
       body: logs.isEmpty
           ? Center(child: Text('No food logs yet.'))
           : RefreshIndicator(
