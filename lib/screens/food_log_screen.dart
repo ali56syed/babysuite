@@ -223,24 +223,19 @@ class _FoodLogScreenState extends State<FoodLogScreen> {
                 textAlign: TextAlign.center,
               ),
             Text(
-              'Alara has had ${_filteredLogs.length} different food items!',
+              _filteredLogs.isEmpty
+                ? 'No food logs found'
+                : _reactionFilter == true
+                  ? 'Alara has shown allergies for ${_filteredLogs.length} different food items!'
+                  : _reactionFilter == false 
+                    ? 'Alara has had ${_filteredLogs.length} allergy-free food items!'
+                    : 'Alara has tried ${_filteredLogs.length} different food items!',
               style: TextStyle(fontSize: 14, color: Colors.black54),
             ),
           ],
         ),
         actions: [
           if (_hasActiveFilters)
-            IconButton(
-              icon: Icon(Icons.clear_all),
-              onPressed: () {
-                setState(() {
-                  _reactionFilter = null;
-                  _startDate = null;
-                  _endDate = null;
-                });
-              },
-              tooltip: 'Clear Filters',
-            ),
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
@@ -290,12 +285,26 @@ class _FoodLogScreenState extends State<FoodLogScreen> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton(
-            heroTag: 'filter',
-            child: Icon(Icons.filter_list),
-            onPressed: _showFilterDialog,
-            tooltip: 'Filter',
-          ),
+          if (_hasActiveFilters)
+            FloatingActionButton(
+              heroTag: 'clearFilter',
+              child: Icon(Icons.clear_all),
+              onPressed: () {
+                setState(() {
+                  _reactionFilter = null;
+                  _startDate = null;
+                  _endDate = null;
+                });
+              },
+              tooltip: 'Clear Filters',
+            )
+          else
+            FloatingActionButton(
+              heroTag: 'filter',
+              child: Icon(Icons.filter_list),
+              onPressed: _showFilterDialog,
+              tooltip: 'Filter',
+            ),
           SizedBox(height: 16),
           FloatingActionButton(
             heroTag: 'add',
