@@ -13,7 +13,6 @@ class FoodLogScreen extends StatefulWidget {
 
 class _FoodLogScreenState extends State<FoodLogScreen> {
   DynamoDBService dynamoDBService = DynamoDBService();
-  late Future<void> _dynamoDbServiceInitialization;
   List<FoodLog> logs = [];
   late bool isNavbarEnabled = YamlHelper().isFeatureEnabled('navbar');
   
@@ -25,7 +24,7 @@ class _FoodLogScreenState extends State<FoodLogScreen> {
   @override
   void initState() {
     super.initState();
-    _dynamoDbServiceInitialization = _initializeDynamoDBService();
+    _initializeDynamoDBService();
   }
 
   Future<void> _initializeDynamoDBService() async {
