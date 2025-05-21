@@ -1,6 +1,6 @@
 {
-    "name": "alaras_app",
-    "short_name": "alaras_app",
+    "name": "babysuite",
+    "short_name": "babysuite",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -1,4 +1,4 @@
-# alaras_app
+# babysuite
 
 A new Flutter project to track all the food that Alara has tried along with some key data points.
 

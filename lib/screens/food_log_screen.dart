@@ -1,4 +1,4 @@
-import 'package:alaras_app/services/dynamodb_service.dart';
+import '../services/dynamodb_service.dart';  
 import 'package:flutter/material.dart';
 import '../helpers/yaml_helper.dart';
 import '../models/food_log.dart';
