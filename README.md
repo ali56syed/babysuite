@@ -1,6 +1,6 @@
-# alaras_app
+# Babysuite
 
-A new Flutter project to track all the food that Alara has tried along with some key data points.
+A new Flutter project to track all the food that a baby has tried along with some key data points.
 
 ## Getting Started
 - Visit https://docs.flutter.dev/get-started/install/macos/mobile-ios and setup Flutter locally
