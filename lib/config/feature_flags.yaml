@@ -7,3 +7,6 @@ mongoDbIntegration:
 navbar:
   enabled: true
   group: "Dev"
+loginScreen:
+  enabled: true
+  group: "Dev"

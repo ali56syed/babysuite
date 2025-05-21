@@ -234,7 +234,6 @@ class _FoodLogScreenState extends State<FoodLogScreen> {
           ],
         ),
         actions: [
-          if (_hasActiveFilters)
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
