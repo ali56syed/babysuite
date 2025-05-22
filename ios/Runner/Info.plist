@@ -30,6 +30,10 @@
 	<string>Main</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>This app uses Face ID to authenticate you.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs camera access to take food log photos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs photo library access to select food log photos.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
