@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../services/dynamodb_service.dart'; 
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -12,6 +15,41 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _isLoading = false;
   String? _errorMessage;
+  bool _faceIdEnabled = false;
+  final DynamoDBService _dynamoDBService = DynamoDBService();
+  final LocalAuthentication auth = LocalAuthentication();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFaceIdPreference();
+  }
+
+  Future<void> _loadFaceIdPreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _faceIdEnabled = prefs.getBool('face_id_enabled') ?? false;
+      if (_faceIdEnabled) {
+        _authenticateWithBiometrics();
+      }
+    });
+  }
+
+  Future<void> _authenticateWithBiometrics() async {
+    try {
+      bool authenticated = await auth.authenticate(
+        localizedReason: 'Please authenticate to login',
+        options: const AuthenticationOptions(biometricOnly: true),
+      );
+      if (authenticated) {
+        Navigator.pushReplacementNamed(context, '/foodLog');
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Biometric authentication failed';
+      });
+    }
+  }
 
   void _login() async {
     setState(() {
@@ -19,9 +57,39 @@ class _LoginScreenState extends State<LoginScreen> {
       _errorMessage = null;
     });
 
-    // TODO: Replace with your authentication logic
-    await Future.delayed(Duration(seconds: 1));
-    if (_emailController.text == 'test@example.com' && _passwordController.text == 'password') {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    bool userExists = await _dynamoDBService.authenticateUser(email, password);
+
+    if (userExists) {
+      final prefs = await SharedPreferences.getInstance();
+      final enabled = prefs.getBool('face_id_enabled') ?? false;
+      if (!enabled) {
+        bool canCheckBiometrics = await auth.canCheckBiometrics;
+        if (canCheckBiometrics) {
+          final enable = await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Enable Face ID?'),
+              content: Text('Would you like to use Face ID for future logins?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: Text('No'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: Text('Yes'),
+                ),
+              ],
+            ),
+          );
+          if (enable == true) {
+            await prefs.setBool('face_id_enabled', true);
+          }
+        }
+      }
       Navigator.pushReplacementNamed(context, '/foodLog');
     } else {
       setState(() {
@@ -45,6 +113,12 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if (_faceIdEnabled)
+                ElevatedButton.icon(
+                  icon: Icon(Icons.face),
+                  label: Text('Login with Face ID'),
+                  onPressed: _authenticateWithBiometrics,
+                ),
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(labelText: 'Email'),
@@ -72,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
               TextButton(
                 onPressed: () {
-                  // TODO: Navigate to registration screen
+                  Navigator.pushNamed(context, '/registration');
                 },
                 child: Text('Don\'t have an account? Register'),
               ),

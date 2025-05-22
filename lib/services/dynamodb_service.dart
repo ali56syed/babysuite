@@ -48,4 +48,39 @@ class DynamoDBService {
       item: foodLog.map((key, value) => MapEntry(key, AttributeValue(s: value))),
     );
   }
+
+  Future<bool> authenticateUser(String email, String password) async {
+    final users = await fetchUsers();
+
+    if (users.isEmpty) {
+      return false;
+    }
+
+    for (final user in users) {
+      if (user['email'] == email && user['password'] == password) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Future<List<Map<String, dynamic>>> fetchUsers() async {
+    final response = await dynamoDB.scan(tableName: 'Users');
+    final items = response.items;
+
+    if (items == null) {
+      return [];
+    }
+
+    return items.map((item) {
+      return item.map((key, value) => MapEntry(key, value.s ?? ''));
+    }).toList();
+  }
+
+  Future<void> addUser(Map<String, dynamic> user) async {
+    await dynamoDB.putItem(
+      tableName: 'Users',
+      item: user.map((key, value) => MapEntry(key, AttributeValue(s: value))),
+    );
+  }
 }

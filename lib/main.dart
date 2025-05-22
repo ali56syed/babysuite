@@ -3,6 +3,7 @@ import 'screens/add_food_log_screen.dart';
 import 'screens/food_log_screen.dart';
 import 'helpers/yaml_helper.dart';
 import 'screens/login_screen.dart';
+import 'screens/registration_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => LoginScreen(),
+        '/registration': (context) => RegistrationScreen(),
         '/': (context) => FoodLogScreen(),
         '/foodLog': (context) => FoodLogScreen(),
         '/addFoodLog': (context) => AddFoodLogScreen([]),
